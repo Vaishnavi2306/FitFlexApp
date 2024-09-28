@@ -25,7 +25,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="DETAILS"
-            android:textSize="34sp" />
+            android:textSize="34dp" />
 
         <TextView
             android:id="@+id/textviewname"
@@ -68,32 +68,41 @@
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/gender"
+            android:layout_marginTop="8dp"
             android:hint="@string/select"
-            android:textSize="15dp">
+            android:padding="8dp"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="#FF5722">
 
             <AutoCompleteTextView
                 android:id="@+id/autoComplete_txt"
                 android:layout_width="340dp"
                 android:layout_height="38dp"
+                android:hint="@string/select"
+                android:padding="8dp"
+                android:textSize="16sp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="30dp"
-                android:inputType="none" />
+                android:inputType="none"
+                android:dropDownVerticalOffset="8dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textInputLayout"
+            android:layout_below="@+id/gender"
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="56dp"
             android:text="Age"
             android:textSize="15dp"
             android:textStyle="bold" />
@@ -150,7 +159,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtStartDate"
+            android:id="@+id/txtTodayDate"
             android:layout_width="340dp"
             android:layout_height="38dp"
             android:layout_below="@+id/textView20"
@@ -245,14 +254,14 @@
 
         <Button
             android:id="@+id/bmi"
-            android:layout_width="168dp"
-            android:layout_height="wrap_content"
+            android:layout_width="129dp"
+            android:layout_height="43dp"
             android:layout_below="@+id/weight"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="22dp"
             android:layout_marginTop="13dp"
-            android:layout_marginEnd="235dp"
+            android:layout_marginEnd="268dp"
             android:backgroundTint="#FF5722"
             android:text="BMI"
             android:textStyle="bold" />
@@ -284,28 +293,16 @@
             android:text="Days"
             android:textSize="15dp" />
 
-        <TextView
-            android:id="@+id/textView27"
-            android:layout_width="380dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/totalDays"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="29dp"
-            android:layout_marginTop="50dp"
-            android:text="Are you sure you want to access camera?"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
         <EditText
             android:id="@+id/bmivalue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="167dp"
+            android:layout_height="38dp"
             android:layout_below="@+id/height"
+            android:layout_alignStart="@+id/height"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="67dp"
-            android:layout_toEndOf="@+id/textView"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="30dp"
             android:ems="10"
             android:inputType="text"
             android:text="Value" />
@@ -316,8 +313,9 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/name"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="78dp"
-            android:layout_marginBottom="106dp"
+            android:layout_marginEnd="111dp"
+            android:layout_marginBottom="108dp"
+            android:gravity="center"
             android:text="Welcome to FITFLEX!!!"
             android:textStyle="bold" />
 
@@ -346,6 +344,28 @@
             android:layout_toEndOf="@+id/textView"
             android:ems="10"
             android:inputType="number" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            app:srcCompat="@drawable/logosmall" />
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextNumber3"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="105dp"
+            android:layout_marginTop="11dp"
+            android:backgroundTint="#FF5722"
+            android:text="Save"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

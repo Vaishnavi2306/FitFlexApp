@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">FitFlex</string>
-    <string name="select">Select One</string>
+    <string name="select">Gender</string>
 </resources>
