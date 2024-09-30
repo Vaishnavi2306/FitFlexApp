@@ -1,5 +1,6 @@
 package com.vaishnavi.fitflex;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,19 +13,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.DatePickerDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private TextView mDisplayDate, mStartDate, mEndDate;
+    private TextView mDisplayDate, mStartDate, mEndDate, mTotalDays;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    private String selectedStartDate, selectedEndDate;
 
     String[] genderItems = {"Male", "Female", "Non-binary"};
     AutoCompleteTextView autoCompleteTextView;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         EditText editTextHeight = findViewById(R.id.height);
         Button buttonCalculateBMI = findViewById(R.id.bmi);
         TextView textViewBMI = findViewById(R.id.bmivalue);
+        mTotalDays = findViewById(R.id.totalDays); // Total days TextView
 
         // BMI calculation on button click
         buttonCalculateBMI.setOnClickListener(view -> {
@@ -107,20 +114,51 @@ public class MainActivity extends AppCompatActivity {
                         String date = selectedMonth + "/" + selectedDay + "/" + selectedYear;
                         textView.setText(date);
                         Log.d(TAG, "Selected date: " + date);
+
+                        // Store the selected start and end dates
+                        if (textView == mStartDate) {
+                            selectedStartDate = date;
+                        } else if (textView == mEndDate) {
+                            selectedEndDate = date;
+                        }
+
+                        // Calculate the total days if both start and end dates are selected
+                        if (selectedStartDate != null && selectedEndDate != null) {
+                            calculateTotalDays(selectedStartDate, selectedEndDate);
+                        }
+
                     },
                     year, month, day);
 
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
         });
+
+        // Handle saving and switching activity
         Button saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Login.class); // Specify the target activity
-                startActivity(intent); // Start the login activity
-            }
+        saveButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Login.class); // Specify the target activity
+            startActivity(intent); // Start the login activity
         });
     }
 
+    // Method to calculate total days between two dates
+    private void calculateTotalDays(String startDate, String endDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            Date start = dateFormat.parse(startDate);
+            Date end = dateFormat.parse(endDate);
+
+            if (start != null && end != null) {
+                long differenceInMillis = end.getTime() - start.getTime();
+                long daysDifference = differenceInMillis / (1000 * 60 * 60 * 24);
+
+                mTotalDays.setText( + daysDifference +" Days");
+            }
+
+        } catch (ParseException e) {
+            Log.e(TAG, "Error parsing dates", e);
+            mTotalDays.setText("Error calculating days.");
+        }
+    }
 }
