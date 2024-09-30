@@ -1,6 +1,7 @@
 package com.vaishnavi.fitflex;
 
-import android.app.DatePickerDialog;
+import static com.vaishnavi.fitflex.R.id.totalDays;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,24 +14,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.app.DatePickerDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private TextView mDisplayDate, mStartDate, mEndDate, mTotalDays;
+    private TextView mDisplayDate, mStartDate, mEndDate;
+    private TextView  mTotalDays;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-
-    private String selectedStartDate, selectedEndDate;
 
     String[] genderItems = {"Male", "Female", "Non-binary"};
     AutoCompleteTextView autoCompleteTextView;
@@ -46,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
         EditText editTextHeight = findViewById(R.id.height);
         Button buttonCalculateBMI = findViewById(R.id.bmi);
         TextView textViewBMI = findViewById(R.id.bmivalue);
-        mTotalDays = findViewById(R.id.totalDays); // Total days TextView
+
+        // Initialize date display and total days TextView
+        mTotalDays = findViewById(R.id.totalDays);
+        mDisplayDate = findViewById(R.id.txtdate);
+        mStartDate = findViewById(R.id.txtTodayDate);
+        mEndDate = findViewById(R.id.txttarget);
 
         // BMI calculation on button click
         buttonCalculateBMI.setOnClickListener(view -> {
@@ -73,10 +75,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Set up DatePickers for various TextViews
-        mDisplayDate = findViewById(R.id.txtdate);
-        mStartDate = findViewById(R.id.txtTodayDate);
-        mEndDate = findViewById(R.id.txttarget);
-
         setupDatePicker(mDisplayDate);
         setupDatePicker(mStartDate);
         setupDatePicker(mEndDate);
@@ -97,6 +95,55 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button saveButton = findViewById(R.id.save_button);
+        saveButton.setOnClickListener(v -> {
+            // Check all required fields
+            if (areFieldsValid(editTextWeight, editTextHeight, mStartDate, mEndDate, autoCompleteTextView)) {
+                // Calculate total days between start date and end date
+                int totalDaysCount = calculateTotalDays(mStartDate.getText().toString(), mEndDate.getText().toString());
+
+                // Display total days
+                mTotalDays.setText("Total Days: " + totalDaysCount);
+
+                // Proceed to the next activity
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(MainActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private boolean areFieldsValid(EditText weight, EditText height, TextView startDate, TextView endDate, AutoCompleteTextView gender) {
+        return !weight.getText().toString().trim().isEmpty() &&
+                !height.getText().toString().trim().isEmpty() &&
+                !startDate.getText().toString().trim().isEmpty() &&
+                !endDate.getText().toString().trim().isEmpty() &&
+                !gender.getText().toString().trim().isEmpty();
+    }
+
+    private int calculateTotalDays(String startDateStr, String endDateStr) {
+        String[] startParts = startDateStr.split("/");
+        String[] endParts = endDateStr.split("/");
+
+        // Check if date format is valid
+        if (startParts.length != 3 || endParts.length != 3) {
+            return 0; // Invalid date format
+        }
+
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.set(Calendar.YEAR, Integer.parseInt(startParts[2]));
+        startCalendar.set(Calendar.MONTH, Integer.parseInt(startParts[0]) - 1); // month is 0-based
+        startCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(startParts[1]));
+
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.set(Calendar.YEAR, Integer.parseInt(endParts[2]));
+        endCalendar.set(Calendar.MONTH, Integer.parseInt(endParts[0]) - 1); // month is 0-based
+        endCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(endParts[1]));
+
+        long diffInMillis = endCalendar.getTimeInMillis() - startCalendar.getTimeInMillis();
+        return (int) (diffInMillis / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
     }
 
     private void setupDatePicker(TextView textView) {
@@ -114,51 +161,11 @@ public class MainActivity extends AppCompatActivity {
                         String date = selectedMonth + "/" + selectedDay + "/" + selectedYear;
                         textView.setText(date);
                         Log.d(TAG, "Selected date: " + date);
-
-                        // Store the selected start and end dates
-                        if (textView == mStartDate) {
-                            selectedStartDate = date;
-                        } else if (textView == mEndDate) {
-                            selectedEndDate = date;
-                        }
-
-                        // Calculate the total days if both start and end dates are selected
-                        if (selectedStartDate != null && selectedEndDate != null) {
-                            calculateTotalDays(selectedStartDate, selectedEndDate);
-                        }
-
                     },
                     year, month, day);
 
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
         });
-
-        // Handle saving and switching activity
-        Button saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Login.class); // Specify the target activity
-            startActivity(intent); // Start the login activity
-        });
-    }
-
-    // Method to calculate total days between two dates
-    private void calculateTotalDays(String startDate, String endDate) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            Date start = dateFormat.parse(startDate);
-            Date end = dateFormat.parse(endDate);
-
-            if (start != null && end != null) {
-                long differenceInMillis = end.getTime() - start.getTime();
-                long daysDifference = differenceInMillis / (1000 * 60 * 60 * 24);
-
-                mTotalDays.setText( + daysDifference +" Days");
-            }
-
-        } catch (ParseException e) {
-            Log.e(TAG, "Error parsing dates", e);
-            mTotalDays.setText("Error calculating days.");
-        }
     }
 }
