@@ -3,6 +3,7 @@ package com.vaishnavi.fitflex;
 import static com.vaishnavi.fitflex.R.id.totalDays;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -100,10 +101,17 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             // Check all required fields
             if (areFieldsValid(editTextWeight, editTextHeight, mStartDate, mEndDate, autoCompleteTextView)) {
-                // Calculate total days between start date and end date
-                int totalDaysCount = calculateTotalDays(mStartDate.getText().toString(), mEndDate.getText().toString());
+                String weight = editTextWeight.getText().toString().trim();
+                String height = editTextHeight.getText().toString().trim();
+                String gender = autoCompleteTextView.getText().toString().trim();
+                String startDate = mStartDate.getText().toString().trim();
+                String endDate = mEndDate.getText().toString().trim();
 
-                // Display total days
+                // Save data
+                saveData(weight, height, gender, startDate, endDate);
+
+                // Calculate total days and display
+                int totalDaysCount = calculateTotalDays(startDate, endDate);
                 mTotalDays.setText("Total Days: " + totalDaysCount);
 
                 // Proceed to the next activity
@@ -113,6 +121,17 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void saveData(String weight, String height, String gender, String startDate, String endDate) {
+        SharedPreferences sharedPreferences = getSharedPreferences("FITFLEX_PREFS", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("weight", weight);
+        editor.putString("height", height);
+        editor.putString("gender", gender);
+        editor.putString("startDate", startDate);
+        editor.putString("endDate", endDate);
+        editor.apply(); // Commit changes
     }
 
     private boolean areFieldsValid(EditText weight, EditText height, TextView startDate, TextView endDate, AutoCompleteTextView gender) {

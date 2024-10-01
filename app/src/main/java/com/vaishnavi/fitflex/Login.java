@@ -1,11 +1,14 @@
 package com.vaishnavi.fitflex;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.icu.util.Calendar; // Make sure to use the right Calendar import
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,7 +23,16 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login); // Ensure this matches your layout file
+        ImageButton optionsButton = findViewById(R.id.optionsButton);
 
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to start OptionsActivity
+                Intent intent = new Intent(Login.this, optionsActivity.class);
+                startActivity(intent); // Start the new activity
+            }
+        });
         // Initialize UI elements
         weightEditText = findViewById(R.id.newWeight);
         heightEditText = findViewById(R.id.newHeight);
