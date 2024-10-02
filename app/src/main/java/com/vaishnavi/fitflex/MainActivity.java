@@ -2,8 +2,9 @@ package com.vaishnavi.fitflex;
 
 import static com.vaishnavi.fitflex.R.id.totalDays;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,9 +27,11 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private EditText editTextWeight, editTextHeight;
     private TextView mDisplayDate, mStartDate, mEndDate;
     private TextView  mTotalDays;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private SharedPreferences sharedPreferences;
 
     String[] genderItems = {"Male", "Female", "Non-binary"};
     AutoCompleteTextView autoCompleteTextView;
@@ -38,12 +41,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 
         // Initialize UI elements
         EditText editTextWeight = findViewById(R.id.weight);
         EditText editTextHeight = findViewById(R.id.height);
         Button buttonCalculateBMI = findViewById(R.id.bmi);
         TextView textViewBMI = findViewById(R.id.bmivalue);
+
+
 
         // Initialize date display and total days TextView
         mTotalDays = findViewById(R.id.totalDays);
@@ -101,17 +108,10 @@ public class MainActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             // Check all required fields
             if (areFieldsValid(editTextWeight, editTextHeight, mStartDate, mEndDate, autoCompleteTextView)) {
-                String weight = editTextWeight.getText().toString().trim();
-                String height = editTextHeight.getText().toString().trim();
-                String gender = autoCompleteTextView.getText().toString().trim();
-                String startDate = mStartDate.getText().toString().trim();
-                String endDate = mEndDate.getText().toString().trim();
+                // Calculate total days between start date and end date
+                int totalDaysCount = calculateTotalDays(mStartDate.getText().toString(), mEndDate.getText().toString());
 
-                // Save data
-                saveData(weight, height, gender, startDate, endDate);
-
-                // Calculate total days and display
-                int totalDaysCount = calculateTotalDays(startDate, endDate);
+                // Display total days
                 mTotalDays.setText("Total Days: " + totalDaysCount);
 
                 // Proceed to the next activity
@@ -120,19 +120,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(MainActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             }
+
         });
     }
-    private void saveData(String weight, String height, String gender, String startDate, String endDate) {
-        SharedPreferences sharedPreferences = getSharedPreferences("FITFLEX_PREFS", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString("weight", weight);
-        editor.putString("height", height);
-        editor.putString("gender", gender);
-        editor.putString("startDate", startDate);
-        editor.putString("endDate", endDate);
-        editor.apply(); // Commit changes
-    }
 
     private boolean areFieldsValid(EditText weight, EditText height, TextView startDate, TextView endDate, AutoCompleteTextView gender) {
         return !weight.getText().toString().trim().isEmpty() &&

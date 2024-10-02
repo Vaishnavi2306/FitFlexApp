@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    tools:context=".optionsActivity"
+    android:background="@color/white">
 
     <ImageButton
         android:id="@+id/imageButton4"
@@ -15,7 +15,8 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/accounticon" />
+        app:srcCompat="@drawable/accounticon"
+        android:contentDescription="@string/select"/>
 
     <TextView
         android:id="@+id/textView4"
@@ -24,6 +25,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="212dp"
         android:text="NAME"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="JOINED TODAY"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView4"
@@ -123,6 +126,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/logosmall" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

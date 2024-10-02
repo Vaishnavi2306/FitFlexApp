@@ -23,16 +23,19 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login); // Ensure this matches your layout file
+
         ImageButton optionsButton = findViewById(R.id.optionsButton);
 
+        // Set up click listener for the optionsButton
         optionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to start OptionsActivity
+                // Create an Intent to navigate to OptionsActivity
                 Intent intent = new Intent(Login.this, optionsActivity.class);
-                startActivity(intent); // Start the new activity
+                startActivity(intent);
             }
         });
+
         // Initialize UI elements
         weightEditText = findViewById(R.id.newWeight);
         heightEditText = findViewById(R.id.newHeight);
