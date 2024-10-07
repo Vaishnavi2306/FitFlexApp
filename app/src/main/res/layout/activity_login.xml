@@ -31,7 +31,7 @@
         app:srcCompat="@drawable/logosmall" />
 
     <Button
-        android:id="@+id/register_button"
+        android:id="@+id/save_Button"
         android:layout_width="139dp"
         android:layout_height="74dp"
         android:layout_above="@+id/imageView"

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button saveButton = findViewById(R.id.save_button);
+        Button saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
             // Check all required fields
             if (areFieldsValid(editTextWeight, editTextHeight, mStartDate, mEndDate, autoCompleteTextView)) {
