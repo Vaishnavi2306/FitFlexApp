@@ -15,8 +15,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/accounticon"
-        android:contentDescription="@string/select"/>
+        app:srcCompat="@drawable/accounticon" />
 
     <TextView
         android:id="@+id/textView4"
