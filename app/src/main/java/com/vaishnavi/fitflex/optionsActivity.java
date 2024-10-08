@@ -21,7 +21,7 @@ public class optionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Navigate to MainActivity
-                Intent intent = new Intent(optionsActivity.this, MainActivity.class);
+                Intent intent = new Intent(optionsActivity.this, AccountActivity.class);
                 startActivity(intent);
             }
         });
