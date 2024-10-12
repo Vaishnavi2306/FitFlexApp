@@ -1,105 +1,155 @@
 package com.vaishnavi.fitflex;
 
+import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText nameEditText, ageEditText, genderEditText, dobEditText, startDateEditText, targetDateEditText;
-    private EditText weightEditText, heightEditText, targetWeightEditText;
-    private Button saveButton;
-
-    private DatabaseHelper databaseHelper;
+    private DatabaseHelper dbHelper;
+    private EditText dobEditText, startDateEditText, targetDateEditText;
+    private EditText heightEditText, weightEditText, bmiEditText, totalDaysEditText, targetWeightEditText;
+    private String selectedGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // Ensure this points to your correct XML layout
 
-        // Initialize DatabaseHelper
-        databaseHelper = new DatabaseHelper(this);
+        dbHelper = new DatabaseHelper(this);
 
-        // Bind views
-        nameEditText = findViewById(R.id.editTextName);
-        ageEditText = findViewById(R.id.editTextAge);
-        genderEditText = findViewById(R.id.editTextGender);
-        dobEditText = findViewById(R.id.editTextDob);
-        startDateEditText = findViewById(R.id.editTextStartDate);
-        targetDateEditText = findViewById(R.id.editTextTargetDate);
-        weightEditText = findViewById(R.id.editTextWeight);
-        heightEditText = findViewById(R.id.editTextHeight);
-        targetWeightEditText = findViewById(R.id.editTextTargetWeight);
-        saveButton = findViewById(R.id.buttonSave);
+        EditText nameEditText = findViewById(R.id.et_name);
+        EditText ageEditText = findViewById(R.id.et_age);
+        dobEditText = findViewById(R.id.et_dob);
+        startDateEditText = findViewById(R.id.start_date);
+        targetDateEditText = findViewById(R.id.target_date);
+        heightEditText = findViewById(R.id.et_height);
+        weightEditText = findViewById(R.id.et_weight);
+        bmiEditText = findViewById(R.id.et_bmi);
+        totalDaysEditText = findViewById(R.id.total_days);
+        targetWeightEditText = findViewById(R.id.et_target_weight); // Added target weight field
+        Button saveButton = findViewById(R.id.btn_save);
 
-        // Set up save button click listener
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        // Gender dropdown
+        AutoCompleteTextView genderDropdown = findViewById(R.id.gender_dropdown);
+
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.gender_array, android.R.layout.simple_dropdown_item_1line);
+
+// Set the adapter to the AutoCompleteTextView
+        genderDropdown.setAdapter(adapter);
+
+// Set the item click listener
+        genderDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                saveUserData();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedGender = parent.getItemAtPosition(position).toString();
             }
+        });
+
+
+        // Date pickers
+        dobEditText.setOnClickListener(v -> showDatePicker(dobEditText));
+        startDateEditText.setOnClickListener(v -> showDatePicker(startDateEditText));
+        targetDateEditText.setOnClickListener(v -> showDatePicker(targetDateEditText));
+
+        saveButton.setOnClickListener(v -> {
+            String name = nameEditText.getText().toString();
+            int age = Integer.parseInt(ageEditText.getText().toString());
+            float weight = Float.parseFloat(weightEditText.getText().toString());
+            float height = Float.parseFloat(heightEditText.getText().toString());
+            float targetWeight = Float.parseFloat(targetWeightEditText.getText().toString()); // Get target weight
+
+            // Calculate BMI
+            float bmi = calculateBMI(weight, height);
+            bmiEditText.setText(String.format("%.2f", bmi));
+
+            // Calculate total days
+            int totalDays = calculateTotalDays(startDateEditText.getText().toString(), targetDateEditText.getText().toString());
+            totalDaysEditText.setText(String.valueOf(totalDays));
+
+            saveUserData(name, age, selectedGender, dobEditText.getText().toString(),
+                    startDateEditText.getText().toString(), targetDateEditText.getText().toString(),
+                    weight, height, targetWeight, bmi, totalDays); // Save target weight
         });
     }
 
-    // Method to save user data
-    private void saveUserData() {
-        try {
-            // Get user input
-            String name = nameEditText.getText().toString();
-            int age = Integer.parseInt(ageEditText.getText().toString());
-            String gender = genderEditText.getText().toString();
-            String dob = dobEditText.getText().toString();
-            String startDate = startDateEditText.getText().toString();
-            String targetDate = targetDateEditText.getText().toString();
-            float weight = Float.parseFloat(weightEditText.getText().toString());
-            float height = Float.parseFloat(heightEditText.getText().toString());
-            float targetWeight = Float.parseFloat(targetWeightEditText.getText().toString());
+    private void showDatePicker(EditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            // Calculate BMI
-            float bmi = databaseHelper.calculateBMI(weight, height);
-
-            // Calculate total days between start and target dates
-            long totalDays = calculateTotalDays(startDate, targetDate);
-
-            // Save data in database
-            databaseHelper.saveData(name, age, gender, dob, startDate, targetDate, weight, height, targetWeight, bmi, totalDays);
-
-            Toast.makeText(MainActivity.this, "Data saved successfully", Toast.LENGTH_SHORT).show();
-
-            // After saving, navigate to the login screen
-            Intent intent = new Intent(MainActivity.this, Login.class);
-            startActivity(intent);
-            finish();
-        } catch (Exception e) {
-            Log.e("MainActivity", "Error while saving data: " + e.getMessage());
-            Toast.makeText(MainActivity.this, "Error saving data", Toast.LENGTH_SHORT).show();
-        }
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
+            String date = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+            editText.setText(date);
+        }, year, month, day);
+        datePickerDialog.show();
     }
 
-    // Method to calculate total days between start date and target date
-    private long calculateTotalDays(String startDate, String targetDate) {
-        try {
-            // Assuming dates are in the format "yyyy-MM-dd"
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date start = dateFormat.parse(startDate);
-            Date target = dateFormat.parse(targetDate);
+    private float calculateBMI(float weight, float height) {
+        // Height is in cm, convert to meters for BMI calculation
+        height = height / 100;
+        return weight / (height * height);
+    }
 
-            // Calculate difference in milliseconds and convert to days
-            long diffInMillis = target.getTime() - start.getTime();
-            return diffInMillis / (1000 * 60 * 60 * 24); // Convert milliseconds to days
-        } catch (Exception e) {
-            Log.e("MainActivity", "Error calculating total days: " + e.getMessage());
-            return 0; // Return 0 if there's an error
+    private int calculateTotalDays(String startDate, String targetDate) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        try {
+            Date start = format.parse(startDate);
+            Date target = format.parse(targetDate);
+            if (start != null && target != null) {
+                long differenceInMillis = target.getTime() - start.getTime();
+                return (int) (differenceInMillis / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0; // Default to 0 if there's an error
+    }
+
+    public void saveUserData(String name, int age, String gender, String dob, String startDate, String targetDate, float weight, float height, float targetWeight, float bmi, int totalDays) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_NAME, name);
+        values.put(DatabaseHelper.COLUMN_AGE, age);
+        values.put(DatabaseHelper.COLUMN_GENDER, gender);
+        values.put(DatabaseHelper.COLUMN_DOB, dob);
+        values.put(DatabaseHelper.COLUMN_START_DATE, startDate);
+        values.put(DatabaseHelper.COLUMN_TARGET_DATE, targetDate);
+        values.put(DatabaseHelper.COLUMN_WEIGHT, weight);
+        values.put(DatabaseHelper.COLUMN_HEIGHT, height);
+        values.put(DatabaseHelper.COLUMN_BMI, bmi);
+        values.put(DatabaseHelper.COLUMN_TOTAL_DAYS, totalDays);
+        values.put(DatabaseHelper.COLUMN_TARGET_WEIGHT, targetWeight); // Save target weight
+
+        long newRowId = db.insert(DatabaseHelper.TABLE_NAME, null, values);
+        if (newRowId == -1) {
+            Toast.makeText(this, "Error saving user data", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "User data saved with ID: " + newRowId, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, welcomeActivity.class); // Ensure WelcomeActivity is the correct class
+            startActivity(intent);
+            finish(); // Close MainActivity
         }
     }
 }
