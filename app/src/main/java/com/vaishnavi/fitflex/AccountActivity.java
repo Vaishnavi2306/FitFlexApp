@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 public class AccountActivity extends AppCompatActivity {
 
-    DatabaseHelper databaseHelper;
+
     TextView txtUserData;
 
     @Override
@@ -17,12 +17,10 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        databaseHelper = new DatabaseHelper(this);
 
 
         // Example: Get user details for the user with name "John"
 
     }
-
 
 }

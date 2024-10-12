@@ -1,8 +1,4 @@
 <resources>
-    <string name="app_name">FITFLEX</string>
-    <string-array name="gender_array">
-        <item>Male</item>
-        <item>Female</item>
-        <item>Other</item>
-    </string-array>
+    <string name="app_name">FitFlex</string>
+    <string name="select">Gender</string>
 </resources>
