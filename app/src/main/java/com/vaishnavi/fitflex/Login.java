@@ -1,120 +1,103 @@
 package com.vaishnavi.fitflex;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.icu.util.Calendar; // Make sure to use the right Calendar import
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Login extends AppCompatActivity {
 
-    private EditText weightEditText;
-    private EditText heightEditText;
-    private TextView bmiValueTextView;
-    private TextView mDisplayDate; // Add TextView for date display
+    private EditText newWeight, newHeight;
+    private TextView bmiValue, txtTodayDate;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); // Ensure this matches your layout file
+        setContentView(R.layout.activity_login);
 
-        ImageButton optionsButton = findViewById(R.id.optionsButton);
+        // Bind views
+        newWeight = findViewById(R.id.newWeight);
+        newHeight = findViewById(R.id.newHeight);
+        bmiValue = findViewById(R.id.bmiValue);
+        txtTodayDate = findViewById(R.id.txtTodayDate);
 
-        // Set up click listener for the optionsButton
-        optionsButton.setOnClickListener(new View.OnClickListener() {
+        // Initialize calendar for date picker
+        calendar = Calendar.getInstance();
+        setupDatePicker();
+
+        // Set up BMI calculation when weight or height is changed
+        setupBMICalculation();
+    }
+
+    // Set up automatic BMI calculation
+    private void setupBMICalculation() {
+        TextWatcher bmiWatcher = new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                // Create an Intent to navigate to OptionsActivity
-                Intent intent = new Intent(Login.this, optionsActivity.class);
-                startActivity(intent);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not needed
             }
-        });
 
-        // Initialize UI elements
-        weightEditText = findViewById(R.id.newWeight);
-        heightEditText = findViewById(R.id.newHeight);
-        bmiValueTextView = findViewById(R.id.bmiValue); // TextView to display BMI
-        mDisplayDate = findViewById(R.id.txtTodayDate); // Initialize the date TextView
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateBMI();  // Call this when text changes
+            }
 
-        // Set the current date when the activity starts
-        setCurrentDate();
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Not needed
+            }
+        };
 
-        // Set up click listener to show date picker
-        mDisplayDate.setOnClickListener(v -> showDatePickerDialog());
-
-        // Add text watchers for the EditTexts
-        weightEditText.addTextChangedListener(bmiTextWatcher);
-        heightEditText.addTextChangedListener(bmiTextWatcher);
+        // Add TextWatcher to both fields to listen for changes
+        newWeight.addTextChangedListener(bmiWatcher);
+        newHeight.addTextChangedListener(bmiWatcher);
     }
 
-    private final TextWatcher bmiTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // No action needed before text changes
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            calculateBMI(); // Calculate BMI on text change
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            // No action needed after text changes
-        }
-    };
-
+    // Calculate and display BMI
     private void calculateBMI() {
-        String weightStr = weightEditText.getText().toString();
-        String heightStr = heightEditText.getText().toString();
+        try {
+            // Get weight and height values
+            String weightStr = newWeight.getText().toString();
+            String heightStr = newHeight.getText().toString();
 
-        if (!weightStr.isEmpty() && !heightStr.isEmpty()) {
-            double weight = Double.parseDouble(weightStr); // Get weight in kg
-            double height = Double.parseDouble(heightStr); // Get height in ft
+            // Only calculate if both fields are filled
+            if (!weightStr.isEmpty() && !heightStr.isEmpty()) {
+                float weight = Float.parseFloat(weightStr);
+                float height = Float.parseFloat(heightStr);
 
-            // Convert height from feet to meters (1 foot = 0.3048 meters)
-            height = height * 0.3048;
-
-            // Calculate BMI: weight (kg) / (height (m) * height (m))
-            double bmi = weight / (height * height);
-            bmiValueTextView.setText(String.format("BMI: %.2f", bmi)); // Display the BMI value
-        } else {
-            bmiValueTextView.setText("BMI: "); // Clear the BMI text if fields are empty
+                // Calculate BMI
+                float bmi = weight / (height * height);
+                bmiValue.setText(String.format(Locale.getDefault(), "%.2f", bmi));  // Display the BMI value
+            } else {
+                bmiValue.setText("");  // Clear BMI if input is incomplete
+            }
+        } catch (NumberFormatException e) {
+            bmiValue.setText("");  // Handle invalid input
         }
     }
 
-    private void setCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        mDisplayDate.setText(day + "/" + (month + 1) + "/" + year); // Month is 0-based
-    }
-
-    private void showDatePickerDialog() {
-        // Get the current date
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-
-        // Create and show the DatePickerDialog
-        DatePickerDialog datePickerDialog = new DatePickerDialog(Login.this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Update the TextView with the selected date
-                    updateDateTextView(selectedDay, selectedMonth, selectedYear);
-                }, year, month, day);
-        datePickerDialog.show();
-    }
-
-    // Helper method to update the TextView with the selected date
-    private void updateDateTextView(int day, int month, int year) {
-        mDisplayDate.setText(day + "/" + (month + 1) + "/" + year); // Month is 0-based
+    // Show date picker when "Select Date" is clicked
+    private void setupDatePicker() {
+        txtTodayDate.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(Login.this,
+                    (view, year, monthOfYear, dayOfMonth) -> {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        txtTodayDate.setText(sdf.format(calendar.getTime()));
+                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+        });
     }
 }

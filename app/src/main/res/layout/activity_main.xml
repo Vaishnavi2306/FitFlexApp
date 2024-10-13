@@ -2,241 +2,208 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@android:color/background_light">
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingStart="15dp"
-        android:paddingEnd="10dp">
+        android:orientation="vertical">
 
-        <!-- Heading -->
+        <!-- Main Heading -->
         <TextView
+            android:id="@+id/main_heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Details"
-            android:gravity="center"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp" />
+            android:paddingBottom="10dp"/>
 
-        <!-- Name -->
+        <!-- Sub Heading -->
+        <TextView
+            android:id="@+id/sub_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to FITFLEX"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:layout_gravity="center"
+            android:paddingBottom="20dp"/>
+
+        <!-- Name Field (AutoComplete) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
-        <EditText
-            android:id="@+id/et_name"
+            android:textSize="16sp" />
+        <AutoCompleteTextView
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your name"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"
+            android:inputType="text"/>
 
-        <!-- Age -->
+        <!-- Age Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Age"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/et_age"
+            android:id="@+id/editTextAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your age"
             android:inputType="number"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Gender (Dropdown) -->
+        <!-- Gender Spinner -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Gender"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
-        <AutoCompleteTextView
-            android:id="@+id/gender_dropdown"
+            android:textSize="16sp" />
+        <Spinner
+            android:id="@+id/spinnerGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Select Gender"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp"
-            android:focusable="true" />
+            android:layout_marginBottom="5dp"/>
 
-        <!-- Date of Birth -->
+        <!-- Date of Birth Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date of Birth"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/et_dob"
+            android:id="@+id/editTextDob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your date of birth"
+            android:hint="Select your date of birth"
             android:focusable="false"
-            android:clickable="true"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Start Date -->
+        <!-- Start Date Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Date"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/start_date"
+            android:id="@+id/editTextStartDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter start date"
+            android:hint="Select the start date"
             android:focusable="false"
-            android:clickable="true"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Target Date -->
+        <!-- Target Date Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Target Date"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/target_date"
+            android:id="@+id/editTextTargetDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter target date"
+            android:hint="Select the target date"
             android:focusable="false"
-            android:clickable="true"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Weight -->
+        <!-- Weight Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Weight (kg)"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/et_weight"
+            android:id="@+id/editTextWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your weight"
+            android:hint="Enter your current weight"
             android:inputType="numberDecimal"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Target Weight -->
+        <!-- Height Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Target Weight (kg)"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:text="Height (m)"
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/et_target_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your target weight"
-            android:inputType="numberDecimal"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
-
-        <!-- Height -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Height (cm)"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
-        <EditText
-            android:id="@+id/et_height"
+            android:id="@+id/editTextHeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your height"
             android:inputType="numberDecimal"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="10dp"/>
 
-        <!-- BMI and Button -->
+        <!-- Target Weight Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Target Weight (kg)"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextTargetWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your target weight"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="10dp"/>
+
+        <!-- BMI Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BMI"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
-        <LinearLayout
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextBmi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <EditText
-                android:id="@+id/et_bmi"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="BMI (auto calculation)"
-                android:inputType="numberDecimal"
-                android:enabled="false"
-                android:padding="12dp"
-                android:background="@drawable/edittext_background"
-                android:layout_marginRight="10dp" />
-        </LinearLayout>
+            android:hint="BMI will be calculated automatically"
+            android:inputType="numberDecimal"
+            android:focusable="false"
+            android:layout_marginBottom="10dp"/>
 
-        <!-- Total Day Count -->
+        <!-- Total Days Field -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total Day Count"
-            android:textSize="18sp"
-            android:layout_marginBottom="5dp" />
+            android:text="Total Days"
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/total_days"
+            android:id="@+id/editTextTotalDays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Total days count (auto calculation)"
+            android:hint="Total days will be calculated automatically"
             android:inputType="number"
-            android:enabled="false"
-            android:padding="12dp"
-            android:background="@drawable/edittext_background"
-            android:layout_marginBottom="15dp" />
+            android:focusable="false"
+            android:layout_marginBottom="20dp"/>
 
         <!-- Save Button -->
         <Button
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonSave"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:layout_gravity="center"
-            android:backgroundTint="#FF5722"
-            android:textColor="#FFFFFF"/>
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp" />
 
-        <!-- Logo at the bottom-right -->
-
+        <!-- ImageView for Logo at the bottom-right -->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/logosmall"
             android:layout_gravity="end|bottom"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp" />
+
     </LinearLayout>
 </ScrollView>
