@@ -9,7 +9,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "fitflex.db";
-    public static final int DATABASE_VERSION = 2;  // Keep the version as-is or increment if needed
+    public static final int DATABASE_VERSION = 3;  // Increment version to force an upgrade
 
     // Table and columns for user data (user_details table)
     public static final String TABLE_NAME_USER_DETAILS = "user_details";
@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // New table and columns for daily progress (daily_progress table)
     public static final String TABLE_NAME_DAILY_PROGRESS = "daily_progress";
+    public static final String COLUMN_PROGRESS_ID = "id";  // New primary key column
     public static final String COLUMN_PROGRESS_DATE = "date";
     public static final String COLUMN_PROGRESS_WEIGHT = "weight";
     public static final String COLUMN_PROGRESS_HEIGHT = "height";
@@ -54,12 +55,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // SQL to create daily_progress table
     private static final String CREATE_TABLE_DAILY_PROGRESS =
             "CREATE TABLE " + TABLE_NAME_DAILY_PROGRESS + " (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Primary key for daily progress
+                    COLUMN_PROGRESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Primary key for daily progress
                     COLUMN_PROGRESS_DATE + " TEXT, " +
                     COLUMN_PROGRESS_WEIGHT + " REAL, " +
                     COLUMN_PROGRESS_HEIGHT + " REAL, " +
                     COLUMN_PROGRESS_BMI + " REAL, " +
-                    COLUMN_PROGRESS_IMAGE + " BLOB" +  // Store image as a blob
+                    COLUMN_PROGRESS_IMAGE + " BLOB" +  // Store image as a blob, nullable
                     ");";
 
     public DatabaseHelper(Context context) {
@@ -71,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("DatabaseHelper", "Creating tables");
         // Create both tables
         db.execSQL(CREATE_TABLE_USER_DETAILS);
-        db.execSQL(CREATE_TABLE_DAILY_PROGRESS);
+        db.execSQL(CREATE_TABLE_DAILY_PROGRESS);  // Ensure this is called to create the daily_progress table
     }
 
     @Override
@@ -83,7 +84,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);  // Recreate the tables
     }
 
-    // Method to save user data into user_details table
     // Method to save user data into user_details table
     public void saveUserData(String name, int age, String gender, String dob, String startDate, String targetDate,
                              float weight, float height, float targetWeight, float bmi, long totalDays) {
@@ -105,9 +105,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
-    // Method to save daily progress into daily_progress table
-    public void saveProgressData(String date, float weight, float height, float bmi, byte[] image) {
+    // Method to save daily progress into daily_progress table (without requiring an image)
+    public void saveProgressData(String date, float weight, float height, float bmi) {
 
         Log.d("DatabaseHelper", "Saving daily progress for date: " + date);
 
@@ -118,10 +117,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PROGRESS_HEIGHT, height);
         values.put(COLUMN_PROGRESS_BMI, bmi);
 
-        // If the image is provided, store it as a BLOB
-        if (image != null) {
-            values.put(COLUMN_PROGRESS_IMAGE, image);
-        }
+        // Image is not being used right now, so we are passing null
+        values.put(COLUMN_PROGRESS_IMAGE, (byte[]) null);
 
         db.insert(TABLE_NAME_DAILY_PROGRESS, null, values);
         db.close();
