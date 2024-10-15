@@ -15,7 +15,7 @@
         android:theme="@style/Theme.FitFlex"
         tools:targetApi="31">
         <activity android:name=".optionsActivity"></activity>
-
+        <activity android:name=".UserDetailsActivity" />
         <activity android:name=".AccountActivity"></activity>
 
         <activity android:name=".historyWeights"></activity>

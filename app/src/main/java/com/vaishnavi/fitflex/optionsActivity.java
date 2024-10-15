@@ -16,6 +16,7 @@ public class optionsActivity extends AppCompatActivity {
         TextView accountTextView = findViewById(R.id.account);
         TextView currentWeightsTextView = findViewById(R.id.currentWeights);
         TextView weightHistoryTextView = findViewById(R.id.weightHistory);
+        TextView userDetailsTextView = findViewById(R.id.userdetails);
 
         accountTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +41,10 @@ public class optionsActivity extends AppCompatActivity {
                 Intent intent = new Intent(optionsActivity.this, historyWeights.class);
                 startActivity(intent);
             }
+        });
+        userDetailsTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(optionsActivity.this, UserDetailsActivity.class);
+            startActivity(intent);
         });
     }
 }
