@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="16dp"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,29 +12,203 @@
 
         <!-- Main Heading -->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="User Details"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
-            android:id="@+id/txtUserData"
+            android:id="@+id/main_heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User Data"
-            android:textSize="18sp"
-            android:layout_margin="16dp" />
+            android:text="Account Details"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:paddingBottom="10dp" />
 
-        <!-- Details TextView -->
+        <!-- Name Field -->
         <TextView
-            android:id="@+id/textViewDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp" />
+            android:hint="Enter your name"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Age Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Age"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your age"
+            android:inputType="number"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Gender Spinner -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textSize="16sp" />
+        <Spinner
+            android:id="@+id/spinnerGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/gender_array" />
+
+
+        <!-- Date of Birth Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextDob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select your date of birth"
+            android:focusable="false"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Start Date Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Date"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select the start date"
+            android:focusable="false"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Target Date Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Target Date"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextTargetDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select the target date"
+            android:focusable="false"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Weight Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weight (kg)"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your current weight"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Height Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Height (m)"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your height"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Target Weight Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Target Weight (kg)"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextTargetWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your target weight"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="10dp" />
+
+        <!-- BMI Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BMI"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextBmi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="BMI will be calculated automatically"
+            android:inputType="numberDecimal"
+            android:focusable="false"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Total Days Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Days"
+            android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editTextTotalDays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Total days will be calculated automatically"
+            android:inputType="number"
+            android:focusable="false"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Update Button -->
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:textSize="18sp"
+            android:backgroundTint="#FF5722"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Delete Button -->
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:textSize="18sp"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/logosmall" />
+
+
+
+
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

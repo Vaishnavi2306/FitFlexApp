@@ -9,9 +9,9 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "fitflex.db";
-    public static final int DATABASE_VERSION = 3;  // Increment version to force an upgrade
+    public static final int DATABASE_VERSION = 5; // Incremented version to ensure onCreate is called
 
-    // Table and columns for user data (user_details table)
+    // Table for user details
     public static final String TABLE_NAME_USER_DETAILS = "user_details";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
@@ -26,14 +26,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BMI = "bmi";
     public static final String COLUMN_TOTAL_DAYS = "total_days";
 
-    // New table and columns for daily progress (daily_progress table)
+    // Table for daily progress
     public static final String TABLE_NAME_DAILY_PROGRESS = "daily_progress";
-    public static final String COLUMN_PROGRESS_ID = "id";  // New primary key column
     public static final String COLUMN_PROGRESS_DATE = "date";
     public static final String COLUMN_PROGRESS_WEIGHT = "weight";
     public static final String COLUMN_PROGRESS_HEIGHT = "height";
     public static final String COLUMN_PROGRESS_BMI = "bmi";
-    public static final String COLUMN_PROGRESS_IMAGE = "image";  // Store images as BLOBs
+    public static final String COLUMN_PROGRESS_IMAGE = "image"; // You can use a BLOB for images
 
     // SQL to create user_details table
     private static final String CREATE_TABLE_USER_DETAILS =
@@ -55,12 +54,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // SQL to create daily_progress table
     private static final String CREATE_TABLE_DAILY_PROGRESS =
             "CREATE TABLE " + TABLE_NAME_DAILY_PROGRESS + " (" +
-                    COLUMN_PROGRESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +  // Primary key for daily progress
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_PROGRESS_DATE + " TEXT, " +
                     COLUMN_PROGRESS_WEIGHT + " REAL, " +
                     COLUMN_PROGRESS_HEIGHT + " REAL, " +
                     COLUMN_PROGRESS_BMI + " REAL, " +
-                    COLUMN_PROGRESS_IMAGE + " BLOB" +  // Store image as a blob, nullable
+                    COLUMN_PROGRESS_IMAGE + " BLOB" +
                     ");";
 
     public DatabaseHelper(Context context) {
@@ -70,23 +69,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("DatabaseHelper", "Creating tables");
-        // Create both tables
-        db.execSQL(CREATE_TABLE_USER_DETAILS);
-        db.execSQL(CREATE_TABLE_DAILY_PROGRESS);  // Ensure this is called to create the daily_progress table
+        db.execSQL(CREATE_TABLE_USER_DETAILS); // Create user_details table
+        db.execSQL(CREATE_TABLE_DAILY_PROGRESS); // Create daily_progress table
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d("DatabaseHelper", "Upgrading database from version " + oldVersion + " to " + newVersion);
-        // Drop both tables if they exist, and recreate them
+        // Drop older versions of both tables if they exist
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DAILY_PROGRESS);
-        onCreate(db);  // Recreate the tables
+        onCreate(db); // Recreate the tables
     }
 
-    // Method to save user data into user_details table
+    // Method to save user data into the user_details table
     public void saveUserData(String name, int age, String gender, String dob, String startDate, String targetDate,
                              float weight, float height, float targetWeight, float bmi, long totalDays) {
+
+        Log.d("DatabaseHelper", "Saving user data for: " + name);
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, name);
@@ -102,12 +103,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TOTAL_DAYS, totalDays);
 
         db.insert(TABLE_NAME_USER_DETAILS, null, values);
-        db.close();
+        db.close(); // Close the database connection after inserting
     }
 
-    // Method to save daily progress into daily_progress table (without requiring an image)
+    // Overloaded method to save daily progress without an image
     public void saveProgressData(String date, float weight, float height, float bmi) {
-
         Log.d("DatabaseHelper", "Saving daily progress for date: " + date);
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -117,10 +117,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PROGRESS_HEIGHT, height);
         values.put(COLUMN_PROGRESS_BMI, bmi);
 
-        // Image is not being used right now, so we are passing null
-        values.put(COLUMN_PROGRESS_IMAGE, (byte[]) null);
-
         db.insert(TABLE_NAME_DAILY_PROGRESS, null, values);
+        db.close();
+    }
+    public void updateUserData(String name, int age, String gender, String dob, String startDate, String targetDate,
+                               float weight, float height, float targetWeight, float bmi, long totalDays) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_AGE, age);
+        values.put(COLUMN_GENDER, gender);
+        values.put(COLUMN_DOB, dob);
+        values.put(COLUMN_START_DATE, startDate);
+        values.put(COLUMN_TARGET_DATE, targetDate);
+        values.put(COLUMN_WEIGHT, weight);
+        values.put(COLUMN_TARGET_WEIGHT, targetWeight);
+        values.put(COLUMN_HEIGHT, height);
+        values.put(COLUMN_BMI, bmi);
+        values.put(COLUMN_TOTAL_DAYS, totalDays);
+
+        // Update the user details in the user_details table
+        // Assuming you have only one user, update the first row
+        db.update(TABLE_NAME_USER_DETAILS, values, COLUMN_ID + "= ?", new String[]{"1"});  // ID is 1 for the first user
+
+        db.close();
+    }
+
+    public void deleteUserData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME_USER_DETAILS, null, null);  // Delete all rows in user_details
+        db.close();
+    }
+    public void deleteAllDailyProgress() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME_DAILY_PROGRESS, null, null);  // Delete all rows in daily_progress
         db.close();
     }
 }

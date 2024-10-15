@@ -1,12 +1,14 @@
 package com.vaishnavi.fitflex;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +24,22 @@ public class Login extends AppCompatActivity {
     private TextView bmiValue, txtTodayDate;
     private Button saveButton;
     private Calendar calendar;
-
+    private ImageButton optionsButton;
     private DatabaseHelper databaseHelper;  // Reference to your database helper class
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Bind the options button
+        optionsButton = findViewById(R.id.optionsButton);
+
+        // Set OnClickListener to navigate to OptionsActivity
+        optionsButton.setOnClickListener(v -> {
+            Intent optionsIntent = new Intent(Login.this, optionsActivity.class);
+            startActivity(optionsIntent);  // Start OptionsActivity
+        });
 
         // Initialize the database helper
         databaseHelper = new DatabaseHelper(this);

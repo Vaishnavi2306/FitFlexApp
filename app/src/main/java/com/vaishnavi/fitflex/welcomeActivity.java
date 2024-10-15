@@ -18,50 +18,34 @@ public class welcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome_page); // Your welcome layout
+        setContentView(R.layout.welcome_page);
 
         dbHelper = new DatabaseHelper(this);
 
-        TextView skipTextView = findViewById(R.id.skip); // Assuming there's a "skip" button or TextView
+        TextView skipTextView = findViewById(R.id.skip);
 
-        skipTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (checkUserData()) {
-                        // If data exists, navigate to LoginActivity for daily entry
-                        Intent loginIntent = new Intent(welcomeActivity.this, Login.class);
-                        startActivity(loginIntent);
-                    } else {
-                        // If no data, navigate to MainActivity to enter user details
-                        Intent mainIntent = new Intent(welcomeActivity.this, MainActivity.class);
-                        startActivity(mainIntent);
-                    }
-                    finish(); // Optional: finish WelcomeActivity
-                } catch (Exception e) {
-                    Log.e("WelcomeActivity", "Error on skip button: " + e.getMessage());
-                    Toast.makeText(welcomeActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+        skipTextView.setOnClickListener(v -> {
+            if (checkUserDataExists()) {
+                // If data exists, navigate to LoginActivity
+                Intent intent = new Intent(welcomeActivity.this, Login.class);
+                startActivity(intent);
+            } else {
+                // If no data, navigate to MainActivity to enter user details
+                Intent intent = new Intent(welcomeActivity.this, MainActivity.class);
+                startActivity(intent);
             }
+            finish();
         });
     }
 
-    // Check if user data exists in the new table user_details
-    private boolean checkUserData() {
-        // Get a readable database
+    // Check if user data exists in the user_details table
+    private boolean checkUserDataExists() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        // Query the user_details table to check if any data exists
-        Cursor cursor = db.query(DatabaseHelper.TABLE_NAME_USER_DETAILS, null, null, null, null, null, null);
-
-        // Check if the table has any rows (data)
-        boolean hasData = cursor.getCount() > 0; // Data exists if count > 0
-
-        // Clean up the cursor and close the database connection
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_NAME_USER_DETAILS, null); // Check all records
+        boolean hasData = cursor.getCount() > 0; // Return true if user data exists
         cursor.close();
         db.close();
-
-        return hasData;  // Return true if data exists, false otherwise
+        return hasData;
     }
 
 }

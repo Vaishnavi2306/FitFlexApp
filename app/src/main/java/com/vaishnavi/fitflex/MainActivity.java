@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Calendar calendar;
     private SharedPreferences sharedPreferences;
 
+    // Declare DatabaseHelper
     private DatabaseHelper databaseHelper;
 
     @Override
@@ -40,17 +43,17 @@ public class MainActivity extends AppCompatActivity {
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("FitFlexPrefs", Context.MODE_PRIVATE);
 
+        // Initialize DatabaseHelper
+        databaseHelper = new DatabaseHelper(this);
+
         // Check if user data is already saved (allow only one user setup)
-        if (sharedPreferences.getBoolean("isSetupComplete", false)) {
+        if (checkUserDataExists()) {
             // Redirect to the login page if setup is already complete
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
             finish();
             return; // Exit onCreate
         }
-
-        // Initialize DatabaseHelper
-        databaseHelper = new DatabaseHelper(this);
 
         // Bind views
         nameEditText = findViewById(R.id.editTextName);
@@ -81,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
             calculateBMIandDays(); // Calculate BMI and Total Days automatically
             saveUserData(); // Save all data to the database
         });
+    }
+
+    // Method to check if user data exists
+    private boolean checkUserDataExists() {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.TABLE_NAME_USER_DETAILS + " WHERE " + DatabaseHelper.COLUMN_ID + "=1", null);
+        boolean hasData = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return hasData;
     }
 
     // Method to set up the Date Pickers for DOB, Start Date, and Target Date
