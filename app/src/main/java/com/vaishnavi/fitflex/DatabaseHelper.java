@@ -107,7 +107,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Overloaded method to save daily progress without an image
-    public void saveProgressData(String date, float weight, float height, float bmi) {
+    // In your DatabaseHelper class
+
+    // Method to save daily progress into the daily_progress table (with image handling)
+    public void saveProgressData(String date, float weight, float height, float bmi, byte[] image) {
         Log.d("DatabaseHelper", "Saving daily progress for date: " + date);
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -117,9 +120,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PROGRESS_HEIGHT, height);
         values.put(COLUMN_PROGRESS_BMI, bmi);
 
+        // If an image is provided, store it as a BLOB
+        if (image != null) {
+            values.put(COLUMN_PROGRESS_IMAGE, image);
+        }
+
         db.insert(TABLE_NAME_DAILY_PROGRESS, null, values);
         db.close();
     }
+
+    // Overloaded method to save daily progress without an image
+    public void saveProgressData(String date, float weight, float height, float bmi) {
+        saveProgressData(date, weight, height, bmi, null); // Call the other method with null for the image
+    }
+
     public void updateUserData(String name, int age, String gender, String dob, String startDate, String targetDate,
                                float weight, float height, float targetWeight, float bmi, long totalDays) {
 

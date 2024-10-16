@@ -7,33 +7,52 @@
     tools:context=".optionsActivity"
     android:background="@color/white">
 
+    <TextView
+        android:id="@+id/about"
+        android:layout_width="274dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="ABOUT APP"
+        android:textColor="@android:color/black"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/userdetails"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/userdetails"
+        app:layout_constraintTop_toBottomOf="@+id/userdetails" />
+
     <ImageButton
         android:id="@+id/imageButton4"
         android:layout_width="100dp"
         android:layout_height="93dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/accounticon" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="55dp"
-        android:layout_height="22dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="212dp"
+        android:layout_width="229dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="156dp"
         android:text="NAME"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.668"
+        app:layout_constraintStart_toEndOf="@+id/imageButton4"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="184dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="0dp"
         android:text="JOINED TODAY"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -78,7 +97,7 @@
         android:layout_marginTop="25dp"
         android:clickable="true"
         android:gravity="center"
-        android:text="WEIGHTS/HISTORY"
+        android:text="HISTORY"
         android:textColor="@android:color/black"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="@+id/progress"
