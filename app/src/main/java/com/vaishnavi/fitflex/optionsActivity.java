@@ -28,6 +28,7 @@ public class optionsActivity extends AppCompatActivity {
         TextView currentWeightsTextView = findViewById(R.id.currentWeights);
         TextView weightHistoryTextView = findViewById(R.id.weightHistory);
         TextView userDetailsTextView = findViewById(R.id.userdetails);
+        TextView progressReportTextView = findViewById(R.id.progress);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -62,6 +63,14 @@ public class optionsActivity extends AppCompatActivity {
         userDetailsTextView.setOnClickListener(v -> {
             Intent intent = new Intent(optionsActivity.this, UserDetailsActivity.class);
             startActivity(intent);
+        });
+
+        progressReportTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(optionsActivity.this, progressReports.class);
+                startActivity(intent);
+            }
         });
 
     }

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +20,8 @@
         <activity android:name=".optionsActivity"></activity>
         <activity android:name=".UserDetailsActivity" />
         <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".progressReports" />
+
 
         <activity android:name=".history"></activity>
         <activity android:name=".Login"

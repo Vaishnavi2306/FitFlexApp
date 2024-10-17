@@ -77,7 +77,16 @@ public class history extends AppCompatActivity {
         progressList = new ArrayList<>();
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        Cursor cursor = db.query(DatabaseHelper.TABLE_NAME_DAILY_PROGRESS, null, null, null, null, null, null);
+        // Query the daily_progress table and order by date in ascending order
+        Cursor cursor = db.query(
+                DatabaseHelper.TABLE_NAME_DAILY_PROGRESS,
+                null,
+                null,
+                null,
+                null,
+                null,
+                DatabaseHelper.COLUMN_PROGRESS_DATE + " ASC"
+        );
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -108,6 +117,7 @@ public class history extends AppCompatActivity {
         recyclerView.setAdapter(progressAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
 
     private void confirmDeleteSelectedItems() {
         new AlertDialog.Builder(this)
