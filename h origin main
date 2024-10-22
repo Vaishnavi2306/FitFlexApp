@@ -1,0 +1,108 @@
+[33mcommit f417bbf947d322a07deedd7fdd238424777066f1[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Mon Oct 21 17:56:18 2024 -0700
+
+    Initial commit for FitFlexApp
+
+[33mcommit e26456317feb2eafd0f779313bf6e8a3fa4a24f1[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Oct 15 17:22:33 2024 -0700
+
+    Viewing daily_progress in history.java and allows to delete from the page and table
+
+[33mcommit fb7f271dfa2c52965fcf85c39bada7ee5d072bba[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Oct 15 15:16:38 2024 -0700
+
+    updated data to UserDetailsActivity from database(user_deatils table)
+
+[33mcommit 124c4cbaeacb21dd077a302a233bcd19b6941ef1[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Oct 15 10:19:56 2024 -0700
+
+    update delete done through AccountActivity
+
+[33mcommit 4eac2d97b3c172238c213fefb01df1266146aa10[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Sun Oct 13 17:16:16 2024 -0700
+
+    saved Login page details to database(daily_progress)
+
+[33mcommit 1a9dd23599a6d4a6ca96225306bdd8d1f6ae4bf8[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Sun Oct 13 16:47:19 2024 -0700
+
+    saved main page details to database
+
+[33mcommit a785942ed5c57247849dfa202080064fe247d6b6[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Sun Oct 13 16:47:11 2024 -0700
+
+    saved main page details to database
+
+[33mcommit 69af6c94f847b96b3b439e31a13090eaeff503fb[m
+Merge: 2614772 bbc26da
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Fri Oct 11 22:35:48 2024 -0700
+
+    FitFlex
+
+[33mcommit 2614772f3513d8de374535287eecaa6768a430b5[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Fri Oct 11 22:21:38 2024 -0700
+
+    FitFlex
+
+[33mcommit 549a4eaee4c16e36c564e00b755cfa248dd9d459[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Oct 8 16:20:48 2024 -0700
+
+    FitFlex
+
+[33mcommit bbc26daf9c869bc401cbafb6c2579bd2b3d03dd2[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Oct 8 16:20:48 2024 -0700
+
+    FitFlex
+
+[33mcommit 680e0dbe0843cc4ed7c9ee6c714efdadfdb1941b[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Mon Oct 7 11:02:50 2024 -0700
+
+    FitFlex
+
+[33mcommit 6b34d3c859cdc6e02b06b64c32a11de9e6a2272a[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Wed Oct 2 16:27:07 2024 -0700
+
+    FitFlex
+
+[33mcommit ca85ecef6c73cfd15cdcf8616385cbd335afa048[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Oct 1 11:01:54 2024 -0700
+
+    saving here still need to updated
+
+[33mcommit 182bee513201eb33c852b4be70bbfb9ddd009b8a[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Mon Sep 30 11:06:59 2024 -0700
+
+    saving here still need to updated
+
+[33mcommit 112a46542958aea8d8f136ae6137d9f0c0a71b1b[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Mon Sep 30 10:48:21 2024 -0700
+
+    saving here still need to updated
+
+[33mcommit 033f5df9e48cda45d0483f41003acc7836f09ea0[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Sat Sep 28 12:14:35 2024 -0700
+
+    saving here still need to updated
+
+[33mcommit c2d01b13be0e3f420795eaa1921ef2ca32e8a927[m
+Author: Vaishnavi <vkothakota@my365.bellevue.edu>
+Date:   Tue Sep 24 16:26:53 2024 -0700
+
+    saving here still need to updated
