@@ -4,13 +4,14 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,7 +32,7 @@ import java.util.Locale;
 public class Login extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 100;
-    private static final int CAMERA_CAPTURE_REQUEST_CODE = 200;
+
     private EditText newWeight, newHeight;
     private TextView bmiValue, txtTodayDate;
     private Button saveButton, cameraButton;
@@ -146,13 +147,14 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    // Handle the result of permission request
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Handle camera permission
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
+                openCamera();  // Camera permission granted, open the camera
             } else {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show();
             }
@@ -163,9 +165,9 @@ public class Login extends AppCompatActivity {
     private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(cameraIntent, CAMERA_CAPTURE_REQUEST_CODE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
         } else {
-            Toast.makeText(this, "Camera not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -173,13 +175,15 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK) {
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            // Get the image captured by the camera
             Bundle extras = data.getExtras();
             progressImage = (Bitmap) extras.get("data");
 
-            // Show the captured image in the ImageView
-            imageViewPreview.setVisibility(View.VISIBLE);
-            imageViewPreview.setImageBitmap(progressImage);
+            // Display the image in the ImageView
+            ImageView imageView = findViewById(R.id.imageViewPreview);
+            imageView.setImageBitmap(progressImage);
         }
     }
 
@@ -199,6 +203,12 @@ public class Login extends AppCompatActivity {
 
             float bmi = Float.parseFloat(bmiStr);
 
+            // Check if the date already exists in the database
+            if (isDateAlreadyEntered(date)) {
+                Toast.makeText(Login.this, "Data for this date already exists. Please delete it first.", Toast.LENGTH_SHORT).show();
+                return;  // Prevent duplicate entry
+            }
+
             // Convert Bitmap to byte array if image is available
             byte[] imageBytes = null;
             if (progressImage != null) {
@@ -216,4 +226,19 @@ public class Login extends AppCompatActivity {
             Toast.makeText(Login.this, "Error saving data", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // Helper method to check if the date already exists in the database
+    private boolean isDateAlreadyEntered(String date) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_NAME_DAILY_PROGRESS,
+                new String[]{DatabaseHelper.COLUMN_PROGRESS_DATE}, // Select only the date column
+                DatabaseHelper.COLUMN_PROGRESS_DATE + " = ?",      // WHERE clause to check for the date
+                new String[]{date},                                // The date passed as argument
+                null, null, null);
+
+        boolean exists = cursor.getCount() > 0; // If the count is more than 0, the date exists
+        cursor.close();
+        return exists;
+    }
+
 }

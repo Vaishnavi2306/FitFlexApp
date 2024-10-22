@@ -103,25 +103,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TOTAL_DAYS, totalDays);
 
         db.insert(TABLE_NAME_USER_DETAILS, null, values);
-        db.close(); // Close the database connection after inserting
-    }
-
-    // Overloaded method to save daily progress without an image
-    // In your DatabaseHelper class
-
-    // Method to save daily progress into the daily_progress table (with image handling)
-    public void saveProgressData(String date, float weight, float height, float bmi, byte[] image) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_PROGRESS_DATE, date);
-        values.put(COLUMN_PROGRESS_WEIGHT, weight);
-        values.put(COLUMN_PROGRESS_HEIGHT, height);
-        values.put(COLUMN_PROGRESS_BMI, bmi);
-        values.put(COLUMN_PROGRESS_IMAGE, image); // Store the image byte array
-
-        db.insert(TABLE_NAME_DAILY_PROGRESS, null, values);
         db.close();
     }
+
+
+    public void saveProgressData(String date, float weight, float height, float bmi, byte[] image) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_PROGRESS_DATE, date);
+            values.put(COLUMN_PROGRESS_WEIGHT, weight);
+            values.put(COLUMN_PROGRESS_HEIGHT, height);
+            values.put(COLUMN_PROGRESS_BMI, bmi);
+            values.put(COLUMN_PROGRESS_IMAGE, image);
+
+            db.insert(TABLE_NAME_DAILY_PROGRESS, null, values);
+        } finally {
+                db.close();
+        }
+    }
+
 
 
     // Overloaded method to save daily progress without an image
