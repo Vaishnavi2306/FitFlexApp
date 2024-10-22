@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -156,16 +157,29 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp" />
 
-    <!-- Camera Button (Bottom-Right Corner) -->
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
-        app:srcCompat="@drawable/camicon"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Camera Button -->
+    <Button
+        android:id="@+id/cameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#6B625A"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/save_Button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ImageView Preview -->
+    <ImageView
+        android:id="@+id/imageViewPreview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/cameraButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
