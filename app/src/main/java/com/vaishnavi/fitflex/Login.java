@@ -40,49 +40,42 @@ public class Login extends AppCompatActivity {
     private Calendar calendar;
     private ImageButton optionsButton;
     private DatabaseHelper databaseHelper;
-    private Bitmap progressImage; // To store the image captured from the camera
+    private Bitmap progressImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Bind the options button
         optionsButton = findViewById(R.id.optionsButton);
-
-        // Set OnClickListener to navigate to OptionsActivity
         optionsButton.setOnClickListener(v -> {
             Intent optionsIntent = new Intent(Login.this, optionsActivity.class);
-            startActivity(optionsIntent);  // Start OptionsActivity
+            startActivity(optionsIntent);
         });
 
-        // Initialize the database helper
         databaseHelper = new DatabaseHelper(this);
 
-        // Bind views
         newWeight = findViewById(R.id.newWeight);
         newHeight = findViewById(R.id.newHeight);
+        newHeight.setEnabled(false); // Disable editing for height field
+
         bmiValue = findViewById(R.id.bmiValue);
         txtTodayDate = findViewById(R.id.txtTodayDate);
         saveButton = findViewById(R.id.save_Button);
         cameraButton = findViewById(R.id.cameraButton);
-        imageViewPreview = findViewById(R.id.imageViewPreview); // ImageView to show captured image
+        imageViewPreview = findViewById(R.id.imageViewPreview);
 
-        // Initialize calendar for date picker
         calendar = Calendar.getInstance();
         setupDatePicker();
 
-        // Set up BMI calculation when weight or height is changed
+        setDefaultHeight(); // Set the default height from the database
+
         setupBMICalculation();
 
-        // Handle save button click to save data to DAILY_PROGRESS table
         saveButton.setOnClickListener(v -> saveData());
-
-        // Handle camera button click to open the camera
         cameraButton.setOnClickListener(v -> checkCameraPermission());
     }
 
-    // Set up automatic BMI calculation
     private void setupBMICalculation() {
         TextWatcher bmiWatcher = new TextWatcher() {
             @Override
@@ -90,19 +83,16 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                calculateBMI();  // Call this when text changes
+                calculateBMI();
             }
 
             @Override
             public void afterTextChanged(Editable s) { }
         };
 
-        // Add TextWatcher to both fields to listen for changes
         newWeight.addTextChangedListener(bmiWatcher);
-        newHeight.addTextChangedListener(bmiWatcher);
     }
 
-    // Method to calculate and display BMI
     private void calculateBMI() {
         try {
             String weightStr = newWeight.getText().toString();
@@ -117,11 +107,10 @@ public class Login extends AppCompatActivity {
                 bmiValue.setText("");
             }
         } catch (NumberFormatException e) {
-            bmiValue.setText("");  // Handle invalid input
+            bmiValue.setText("");
         }
     }
 
-    // Show date picker when "Select Date" is clicked
     private void setupDatePicker() {
         txtTodayDate.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(Login.this,
@@ -136,14 +125,13 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    // Check for camera permission at runtime
     private void checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
         } else {
-            openCamera(); // Open camera if permission already granted
+            openCamera();
         }
     }
 
@@ -151,17 +139,15 @@ public class Login extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        // Handle camera permission
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();  // Camera permission granted, open the camera
+                openCamera();
             } else {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // Method to open the camera
     private void openCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -171,26 +157,19 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    // Handle the camera result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            // Get the image captured by the camera
             Bundle extras = data.getExtras();
             progressImage = (Bitmap) extras.get("data");
-
-            // Display the image in the ImageView
-            ImageView imageView = findViewById(R.id.imageViewPreview);
-            imageView.setImageBitmap(progressImage);
+            imageViewPreview.setImageBitmap(progressImage);
         }
     }
 
-    // Method to save data to DAILY_PROGRESS table
     private void saveData() {
         try {
-            // Get user inputs
             String date = txtTodayDate.getText().toString();
             float weight = Float.parseFloat(newWeight.getText().toString());
             float height = Float.parseFloat(newHeight.getText().toString());
@@ -203,13 +182,11 @@ public class Login extends AppCompatActivity {
 
             float bmi = Float.parseFloat(bmiStr);
 
-            // Check if the date already exists in the database
             if (isDateAlreadyEntered(date)) {
                 Toast.makeText(Login.this, "Data for this date already exists. Please delete it first.", Toast.LENGTH_SHORT).show();
-                return;  // Prevent duplicate entry
+                return;
             }
 
-            // Convert Bitmap to byte array if image is available
             byte[] imageBytes = null;
             if (progressImage != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -217,9 +194,7 @@ public class Login extends AppCompatActivity {
                 imageBytes = stream.toByteArray();
             }
 
-            // Save data in the database (including image)
             databaseHelper.saveProgressData(date, weight, height, bmi, imageBytes);
-
             Toast.makeText(Login.this, "Data and picture saved successfully", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e("LoginActivity", "Error while saving data: " + e.getMessage());
@@ -227,18 +202,38 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    // Helper method to check if the date already exists in the database
     private boolean isDateAlreadyEntered(String date) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         Cursor cursor = db.query(DatabaseHelper.TABLE_NAME_DAILY_PROGRESS,
-                new String[]{DatabaseHelper.COLUMN_PROGRESS_DATE}, // Select only the date column
-                DatabaseHelper.COLUMN_PROGRESS_DATE + " = ?",      // WHERE clause to check for the date
-                new String[]{date},                                // The date passed as argument
+                new String[]{DatabaseHelper.COLUMN_PROGRESS_DATE},
+                DatabaseHelper.COLUMN_PROGRESS_DATE + " = ?",
+                new String[]{date},
                 null, null, null);
 
-        boolean exists = cursor.getCount() > 0; // If the count is more than 0, the date exists
+        boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;
     }
 
+    private void setDefaultHeight() {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_NAME_USER_DETAILS,
+                new String[]{DatabaseHelper.COLUMN_HEIGHT},
+                null, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                float height = cursor.getFloat(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_HEIGHT));
+                newHeight.setText(String.valueOf(height));
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                cursor.close();
+            }
+        } else {
+            newHeight.setText("");
+        }
+
+        db.close();
+    }
 }

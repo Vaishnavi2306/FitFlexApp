@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/about_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About FITFLEX"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:id="@+id/about_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FITFLEX is a simple fitness tracking app that allows users to monitor their weight and calculate BMI. It helps users stay on track with their fitness goals by tracking progress over time."
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:paddingBottom="24dp"
+        android:lineSpacingExtra="4dp" />
+
+    <TextView
+        android:id="@+id/features_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Features:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:id="@+id/feature_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="• Track weight and BMI\n• Set fitness goals\n• View progress charts\n• Capture and store progress photos"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:paddingBottom="24dp" />
+
+    <ImageView
+        android:id="@+id/app_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="114dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="FITFLEX Logo"
+        android:foregroundGravity="bottom"
+        android:paddingTop="24dp"
+        android:src="@drawable/logosmall" />
+</LinearLayout>

@@ -45,6 +45,8 @@ public class optionsActivity extends AppCompatActivity {
             }
         });
 
+
+
         currentWeightsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +74,15 @@ public class optionsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        TextView aboutTextView = findViewById(R.id.about); // Reference to the "About" TextView
+        aboutTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent aboutIntent = new Intent(optionsActivity.this, AboutActivity.class);
+                startActivity(aboutIntent);
+            }
+        });
+
 
     }
 
